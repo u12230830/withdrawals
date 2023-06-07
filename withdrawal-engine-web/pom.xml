@@ -17,6 +17,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>za.co.momentum</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>withdrawal-engine-service</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

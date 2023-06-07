@@ -15,10 +15,10 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "PRODUCT_TYPE_ID")
-    @OneToOne
+    @JoinColumn(name = "PRODUCT_TYPE_ID")
+    @OneToOne(cascade = CascadeType.ALL)
     private ProductType productType;
 
     @Column(name = "ACCOUNT_NUMBER")
@@ -26,4 +26,8 @@ public class Product {
 
     @Column(name = "BALANCE")
     private BigDecimal balance;
+
+    @PrimaryKeyJoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Customer customer;
 }

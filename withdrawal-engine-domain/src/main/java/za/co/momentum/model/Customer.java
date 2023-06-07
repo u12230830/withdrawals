@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -16,22 +15,22 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private Integer id;
 
     @Column(name = "DOB")
-    private Date age;
+    private Date dob;
 
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "PRODUCTS")
-    @OneToMany
-    @JoinColumn(name = "PRODUCT_ID")
-    private List<Product> products;
+    @Column(name = "PHONE_NO")
+    private String phoneNo;
 
-    @Column(name = "ADDRESS_ID")
-    @OneToOne
-    @JoinColumn(name = "ADDRESS_ID")
+    @Column(name = "EMAIL")
+    private String email;
+
+    @PrimaryKeyJoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 }
 
