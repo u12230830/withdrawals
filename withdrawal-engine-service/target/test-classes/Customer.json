@@ -1,0 +1,16 @@
+{
+  "id": 12,
+  "dob": 757296000000,
+  "name": "Joseph",
+  "phoneNo": "+27 823 2323",
+  "email": "josi@example.com",
+  "address": {
+    "id": 12,
+    "lineOne": null,
+    "streetName": "123 Rd Drive",
+    "town": "Jozi",
+    "province": "Gauteng",
+    "postalCode": "1242",
+    "country": "South Africa"
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/withdrawal-engine-common.iml" filepath="$PROJECT_DIR$/withdrawal-engine-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/withdrawal-engine-domain.iml" filepath="$PROJECT_DIR$/withdrawal-engine-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/withdrawal-engine-service.iml" filepath="$PROJECT_DIR$/withdrawal-engine-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/withdrawal-engine-web.iml" filepath="$PROJECT_DIR$/withdrawal-engine-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/withdrawals.iml" filepath="$PROJECT_DIR$/withdrawals.iml" />
+    </modules>
+  </component>
+</project>

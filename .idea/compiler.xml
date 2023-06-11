@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="withdrawal-engine-common" target="17" />
+      <module name="withdrawal-engine-domain" target="17" />
+      <module name="withdrawal-engine-service" target="1.8" />
+      <module name="withdrawal-engine-web" target="17" />
+      <module name="withdrawals" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,10 @@
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/model/Address.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/model/Withdrawal.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/model/Customer.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/repo/ProductTypeRepository.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/model/ProductType.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/model/Product.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/repo/WithdrawalRepository.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/repo/CustomerRepository.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/repo/AddressRepository.java
+/Users/fakopeleha/Documents/Playground/repos/withdrawals/withdrawal-engine-domain/src/main/java/za/co/momentum/repo/ProductRepository.java
