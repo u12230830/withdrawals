@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
-import za.co.momentum.exception.AddressDto;
-import za.co.momentum.exception.InvestorInfoResponse;
+import dto.AddressDto;
+import dto.InvestorInfoResponse;
 import za.co.momentum.model.Address;
 import za.co.momentum.model.Customer;
 

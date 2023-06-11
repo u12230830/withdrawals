@@ -6,11 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoSettings;
-import za.co.momentum.exception.InvestorInfoResponse;
+import dto.InvestorInfoResponse;
 import za.co.momentum.model.Customer;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;
-import za.co.momentum.service.util.WithdrawalEngineServiceTestUtils;
+import util.WithdrawalEngineServiceTestUtils;
 import za.co.momentum.util.DtoMapper;
 import za.co.momentum.util.DtoMapperImpl;
 

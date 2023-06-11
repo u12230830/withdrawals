@@ -1,7 +1,10 @@
-package za.co.momentum.exception;
+package dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@Data
 public class InvestorInfoResponse {
     private String fullName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -3,7 +3,7 @@ package za.co.momentum.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.co.momentum.exception.InvestorInfoResponse;
+import dto.InvestorInfoResponse;
 import za.co.momentum.model.Customer;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;

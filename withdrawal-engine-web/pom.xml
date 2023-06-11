@@ -20,8 +20,9 @@
     <dependencies>
         <dependency>
             <groupId>za.co.momentum</groupId>
-            <version>0.0.1-SNAPSHOT</version>
             <artifactId>withdrawal-engine-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

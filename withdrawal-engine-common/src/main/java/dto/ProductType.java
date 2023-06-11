@@ -1,4 +1,4 @@
-package za.co.momentum.exception;
+package dto;
 
 import lombok.Getter;
 
