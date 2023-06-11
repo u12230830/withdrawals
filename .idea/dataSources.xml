@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="withdrawalsdb@withdrawalsdb.cosl31zkfvxa.us-east-1.rds.amazonaws.com" uuid="ca8b9007-3598-4cdc-aeab-87262f95738a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://withdrawalsdb.cosl31zkfvxa.us-east-1.rds.amazonaws.com:5432/withdrawalsdb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

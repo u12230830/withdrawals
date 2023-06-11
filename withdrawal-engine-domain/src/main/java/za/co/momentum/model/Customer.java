@@ -26,7 +26,7 @@ public class Customer {
     @Column(name = "PHONE_NO")
     private String phoneNo;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @PrimaryKeyJoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")

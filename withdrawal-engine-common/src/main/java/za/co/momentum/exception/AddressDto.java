@@ -1,6 +1,5 @@
 package za.co.momentum.exception;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Address {
+public class AddressDto {
     private String lineOne;
     private String streetName;
     private String town;
