@@ -1,5 +1,6 @@
 package za.co.momentum.service;
 
+import org.springframework.stereotype.Service;
 import za.co.momentum.exception.InvestorInfoResponse;
 
 import java.math.BigDecimal;
