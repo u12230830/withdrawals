@@ -1,30 +1,32 @@
 package za.co.momentum.util;
 
+import dto.AddressDto;
+import dto.InvestorInfoResponse;
+import dto.ProductDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.Qualifier;
 import org.springframework.stereotype.Component;
-import dto.AddressDto;
-import dto.InvestorInfoResponse;
 import za.co.momentum.model.Address;
 import za.co.momentum.model.Customer;
+import za.co.momentum.model.Product;
+import za.co.momentum.model.ProductType;
+
+import java.util.List;
 
 @Component
 @Mapper(componentModel = "spring")
 public interface DtoMapper {
     @Mapping(target = "fullName", source = "name")
-    @Mapping(target = "email", source = "email")
     @Mapping(target = "dateOfBirth", source = "dob")
-    @Mapping(target = "phoneNo", source = "phoneNo")
     @Mapping(target = "addressDto", source = "address", qualifiedByName = "mapAddressToAddressDto")
     InvestorInfoResponse mapCustomerToInvestorInfoResponse(Customer customer);
 
-    @Mapping(target = "lineOne", source = "lineOne")
-    @Mapping(target = "streetName", source = "streetName")
-    @Mapping(target = "town", source = "town")
-    @Mapping(target = "province", source = "province")
-    @Mapping(target = "postalCode", source = "postalCode")
-    @Mapping(target = "country", source = "country")
     @Named("mapAddressToAddressDto")
     AddressDto mapAddressToAddressDto(Address address);
+
+    @Mapping(target = "name", source = "productType.name")
+    @Mapping(target = "description", source = "productType.description")
+    ProductDto mapProductToProductDto(Product products);
 }

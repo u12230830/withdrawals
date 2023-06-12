@@ -1,14 +1,10 @@
 package dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class AddressDto {
     private String lineOne;
     private String streetName;

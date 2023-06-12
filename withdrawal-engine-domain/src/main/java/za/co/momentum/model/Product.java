@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Loader;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.math.BigDecimal;
 
@@ -18,16 +20,16 @@ public class Product {
     private Integer id;
 
     @JoinColumn(name = "PRODUCT_TYPE_ID")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ProductType productType;
 
     @Column(name = "ACCOUNT_NUMBER")
-    private Long accountNumber;
+    private String accountNumber;
 
     @Column(name = "BALANCE")
     private BigDecimal balance;
 
     @PrimaryKeyJoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Customer customer;
 }

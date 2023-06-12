@@ -26,9 +26,9 @@ public class Withdrawal {
     private Date withdrawalDate;
 
     @PrimaryKeyJoinColumn(name = "PRODUCT_ID")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Product product;
 
-    @Column(name = "STATUS")
-    private Integer status;
+    @Column(name = "TRX_ID")
+    private Long transactionId;
 }

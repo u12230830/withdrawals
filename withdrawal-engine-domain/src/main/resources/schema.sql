@@ -3,6 +3,7 @@ drop table if exists product;
 drop table if exists customer;
 drop table if exists address;
 drop table if exists product_type;
+drop table if exists withdrawal_status;
 
 create table address
 (
@@ -36,11 +37,11 @@ create table product_type
 
 create table product
 (
-    id              int    not null primary key,
+    id              int     not null primary key,
     balance         numeric(38, 2),
-    account_number  bigint not null,
-    customer_id     int    not null,
-    product_type_id int    not null,
+    account_number  varchar not null,
+    customer_id     int     not null,
+    product_type_id int     not null,
 
     foreign key (customer_id) references customer (id),
     foreign key (product_type_id) references product_type (id)
@@ -52,7 +53,15 @@ create table withdrawal
     amount          numeric(38, 2) not null,
     withdrawal_date timestamp      not null,
     product_id      int            not null,
-    status          smallint       not null,
+    trx_id          bigint         not null,
 
     foreign key (product_id) references product (id)
+);
+
+create table withdrawal_status
+(
+    id          int          not null primary key,
+    status      smallint     not null,
+    description varchar(255) not null,
+    trx_id      bigint       not null
 );

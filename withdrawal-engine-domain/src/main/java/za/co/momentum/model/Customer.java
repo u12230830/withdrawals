@@ -30,7 +30,7 @@ public class Customer {
     private String email;
 
     @PrimaryKeyJoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
 }
 

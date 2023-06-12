@@ -10,6 +10,6 @@ insert into product_type(id, description, name)
 VALUES (2, 'SAVINGS', 'Tax-free savings account');
 
 insert into product(id, balance, account_number, customer_id, product_type_id)
-VALUES (1, 500000.00, 12345, 1, 1);
+VALUES (1, 500000.00, '12345', 1, 1);
 insert into product(id, balance, account_number, customer_id, product_type_id)
-VALUES (2, 36000.00, 12345, 1, 2);
+VALUES (2, 36000.00, '678910', 1, 2);
