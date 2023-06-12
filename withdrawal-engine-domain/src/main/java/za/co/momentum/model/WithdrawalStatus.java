@@ -25,9 +25,6 @@ public class WithdrawalStatus {
     @Column(name = "NAME")
     private Integer status;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "TRX_ID")
     private Long withdrawalTransactionId;
 }

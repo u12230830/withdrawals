@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import za.co.momentum.exception.ValidationException;
 import za.co.momentum.model.Customer;
 import za.co.momentum.model.Product;
+import za.co.momentum.model.Withdrawal;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;
+import za.co.momentum.repo.WithdrawalRepository;
 import za.co.momentum.util.DtoMapper;
 
 import java.math.BigDecimal;
@@ -32,6 +34,9 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
     private CustomerRepository customerRepository;
 
     @Autowired
+    private WithdrawalRepository withdrawalRepository;
+
+    @Autowired
     private DtoMapper dtoMapper;
 
     @Transactional
@@ -49,9 +54,18 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             // Todo: Add an exception handler
             throw e;
         }
+        // todo: Emit STARTED event
 
         Long trx = RandomGenerator.getDefault().nextLong();
+        Withdrawal withdrawal = createNewWithdrawal(amount, product, trx);
 
+        // todo: EXECUTING
+        product.setBalance(product.getBalance().subtract(amount));
+
+        productRepository.save(product);
+        withdrawalRepository.save(withdrawal);
+
+        // todo: DONE
         return null;
     }
 
@@ -90,13 +104,23 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             throw new ValidationException("Customer age constraint violation");
         }
 
-        if (amount.compareTo(product.getBalance()) > 0){
+        if (amount.compareTo(product.getBalance()) > 0) {
             throw new ValidationException("Amount requested exceeds the available balance");
         }
 
-        if (amount.compareTo(product.getBalance().multiply(BigDecimal.valueOf(0.9))) > 0){
+        if (amount.compareTo(product.getBalance().multiply(BigDecimal.valueOf(0.9))) > 0) {
             throw new ValidationException("Customer cannot withdraw more than 90% of their investment");
         }
+    }
+
+
+    private Withdrawal createNewWithdrawal(BigDecimal amount, Product product, Long trx) {
+        Withdrawal withdrawal = new Withdrawal();
+        withdrawal.setAmount(amount);
+        withdrawal.setProduct(product);
+        withdrawal.setTransactionId(trx);
+        withdrawal.setWithdrawalDate(Date.valueOf(LocalDate.now()));
+        return withdrawal;
     }
 
     private int calculateAge(Date dob) {

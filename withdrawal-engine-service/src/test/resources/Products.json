@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "productType": {
+      "id": 1,
+      "name": "RETIREMENT",
+      "description": "401 K"
+    },
+    "accountNumber": null,
+    "balance": 500000,
+    "customer": {
+      "id": 12,
+      "dob": "1993-12-31",
+      "name": "Joseph",
+      "phoneNo": "+27 823 2323",
+      "email": "josi@example.com",
+      "address": {
+        "id": 12,
+        "lineOne": null,
+        "streetName": "123 Rd Drive",
+        "town": "Jozi",
+        "province": "Gauteng",
+        "postalCode": "1242",
+        "country": "South Africa"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "productType": {
+      "id": 2,
+      "name": "SAVINGS",
+      "description": "Tax Free Savings"
+    },
+    "accountNumber": null,
+    "balance": 30000,
+    "customer": {
+      "id": 12,
+      "dob": "1993-12-31",
+      "name": "Joseph",
+      "phoneNo": "+27 823 2323",
+      "email": "josi@example.com",
+      "address": {
+        "id": 12,
+        "lineOne": null,
+        "streetName": "123 Rd Drive",
+        "town": "Jozi",
+        "province": "Gauteng",
+        "postalCode": "1242",
+        "country": "South Africa"
+      }
+    }
+  }
+]

@@ -1,14 +1,17 @@
 package util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.TimeZone;
 
-public class WithdrawalEngineServiceTestUtils {
+public class WithdrawalEngineMapperUtils {
     private static final ObjectMapper OBJECT_MAPPER;
 
     static {
@@ -18,7 +21,7 @@ public class WithdrawalEngineServiceTestUtils {
         OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("GMT+2:00"));
     }
 
-    private WithdrawalEngineServiceTestUtils() {
+    private WithdrawalEngineMapperUtils() {
     }
 
     public static <T> T jsonStringToObject(String jsonString, Class<T> resultObjectType) throws Exception {
@@ -30,9 +33,27 @@ public class WithdrawalEngineServiceTestUtils {
         }
     }
 
+    public static <T> String objectToJsonString(T object) {
+        ObjectWriter ow = OBJECT_MAPPER.writer().withDefaultPrettyPrinter();
+        try {
+            return ow.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static <T> T jsonFileToObject(String pathToJsonFile, Class<T> resultObjectType) throws Exception {
         String json = readFile(pathToJsonFile);
         return jsonStringToObject(json, resultObjectType);
+    }
+
+    public static <T> List<T> jsonFileToObjectList(String pathToJsonFile, Class<T> resultObjectType){
+        try {
+            String json = readFile(pathToJsonFile);
+            return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, resultObjectType));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String readFile(String path) throws Exception {

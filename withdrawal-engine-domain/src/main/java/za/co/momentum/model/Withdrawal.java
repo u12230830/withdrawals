@@ -3,8 +3,10 @@ package za.co.momentum.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -13,6 +15,8 @@ import java.sql.Date;
 @Table(name = "WITHDRAWAL")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Setter
 @Getter
 public class Withdrawal {
     @Id
