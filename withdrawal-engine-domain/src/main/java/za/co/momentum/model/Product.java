@@ -18,7 +18,15 @@ import java.math.BigDecimal;
 @Setter
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "sequence-generator"
+    )
+    @SequenceGenerator(
+            name = "sequence-generator",
+            sequenceName = "product_seq",
+            allocationSize = 1
+    )
     private Integer id;
 
     @JoinColumn(name = "PRODUCT_TYPE_ID")

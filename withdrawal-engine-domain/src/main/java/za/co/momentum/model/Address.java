@@ -13,7 +13,15 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "sequence-generator"
+    )
+    @SequenceGenerator(
+            name = "sequence-generator",
+            sequenceName = "address_seq",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "LINE_ONE")

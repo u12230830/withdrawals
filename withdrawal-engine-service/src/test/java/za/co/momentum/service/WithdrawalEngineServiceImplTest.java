@@ -153,13 +153,11 @@ class WithdrawalEngineServiceImplTest {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
         product.getCustomer().setDob(Date.valueOf(LocalDate.of(1950, 5, 2)));
         when(productRepository.findByAccountNumber(anyString())).thenReturn(product);
-        when(productRepository.save(any(Product.class))).thenReturn(product);
         when(withdrawalRepository.save(any(Withdrawal.class))).thenReturn(null);
 
         try {
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(10000));
             verify(productRepository).findByAccountNumber(anyString());
-            verify(productRepository).save(any(Product.class));
             verify(withdrawalRepository).save(any(Withdrawal.class));
         } catch (ValidationException e) {
             fail();

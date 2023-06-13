@@ -10,27 +10,35 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "WITHDRAWAL")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Setter
 @Getter
 public class Withdrawal {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "sequence-generator"
+    )
+    @SequenceGenerator(
+            name = "sequence-generator",
+            sequenceName = "withdrawal_seq",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "AMOUNT")
     private BigDecimal amount;
 
     @Column(name = "WITHDRAWAL_DATE")
-    private Date withdrawalDate;
+    private Timestamp withdrawalDate;
 
-    @PrimaryKeyJoinColumn(name = "PRODUCT_ID")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @PrimaryKeyJoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
     @Column(name = "TRX_ID")

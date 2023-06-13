@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductType {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "NAME")

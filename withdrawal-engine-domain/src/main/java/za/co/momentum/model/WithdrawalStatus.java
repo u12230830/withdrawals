@@ -5,11 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.random.RandomGenerator;
 
 @Entity
@@ -19,7 +21,15 @@ import java.util.random.RandomGenerator;
 @Getter
 public class WithdrawalStatus {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "sequence-generator"
+    )
+    @SequenceGenerator(
+            name = "sequence-generator",
+            sequenceName = "withdrawal_status_seq",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "NAME")
@@ -27,4 +37,7 @@ public class WithdrawalStatus {
 
     @Column(name = "TRX_ID")
     private Long withdrawalTransactionId;
+
+    @Column(name = "TRX_TIME")
+    private Timestamp transactionTime;
 }

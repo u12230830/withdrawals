@@ -19,7 +19,9 @@ import za.co.momentum.util.DtoMapper;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.random.RandomGenerator;
@@ -66,7 +68,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         withdrawalRepository.save(withdrawal);
 
         // todo: DONE
-        return null;
+        return true;
     }
 
     @Override
@@ -111,6 +113,10 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         if (amount.compareTo(product.getBalance().multiply(BigDecimal.valueOf(0.9))) > 0) {
             throw new ValidationException("Customer cannot withdraw more than 90% of their investment");
         }
+
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidationException("Amount requested cannot be negative");
+        }
     }
 
 
@@ -119,7 +125,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         withdrawal.setAmount(amount);
         withdrawal.setProduct(product);
         withdrawal.setTransactionId(trx);
-        withdrawal.setWithdrawalDate(Date.valueOf(LocalDate.now()));
+        withdrawal.setWithdrawalDate(Timestamp.valueOf(LocalDateTime.now()));
         return withdrawal;
     }
 

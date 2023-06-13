@@ -5,6 +5,18 @@ drop table if exists address;
 drop table if exists product_type;
 drop table if exists withdrawal_status;
 
+drop sequence if exists product_seq;
+drop sequence if exists customer_seq;
+drop sequence if exists address_seq;
+drop sequence if exists withdrawal_status_seq;
+drop sequence if exists withdrawal_seq;
+
+create sequence product_seq;
+create sequence customer_seq;
+create sequence address_seq;
+create sequence withdrawal_status_seq;
+create sequence withdrawal_seq;
+
 create table address
 (
     id          int          not null primary key,
@@ -62,6 +74,6 @@ create table withdrawal_status
 (
     id          int          not null primary key,
     status      smallint     not null,
-    description varchar(255) not null,
-    trx_id      bigint       not null
+    trx_id      bigint       not null,
+    trx_time    timestamp    not null
 );

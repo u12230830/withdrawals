@@ -16,7 +16,15 @@ import java.sql.Date;
 @Setter
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "sequence-generator"
+    )
+    @SequenceGenerator(
+            name = "sequence-generator",
+            sequenceName = "customer_seq",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "DOB")
