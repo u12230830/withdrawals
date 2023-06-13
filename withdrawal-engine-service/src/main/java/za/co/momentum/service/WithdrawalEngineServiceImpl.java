@@ -5,7 +5,6 @@ import dto.ProductDto;
 import dto.ProductTypeEnum;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.momentum.exception.ValidationException;
@@ -98,7 +97,6 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
 
         return productDtos;
     }
-
 
     private void validateWithdrawalRules(BigDecimal amount, Product product) {
         if (product.getId().equals(ProductTypeEnum.RETIREMENT.getProductTypeId())
