@@ -6,9 +6,10 @@ import za.co.momentum.model.Customer;
 import za.co.momentum.model.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findAllByCustomer(Customer customer);
-    Product findByAccountNumber(String accountNumber);
+    Optional<List<Product>> findAllByCustomer(Customer customer);
+    Optional<Product> findByAccountNumber(String accountNumber);
 }

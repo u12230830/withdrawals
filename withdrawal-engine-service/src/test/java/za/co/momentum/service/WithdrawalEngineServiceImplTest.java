@@ -25,6 +25,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -66,7 +67,7 @@ class WithdrawalEngineServiceImplTest {
     @Test
     void testGetInvestorInfo() throws Exception {
         Customer customer = WithdrawalEngineMapperUtils.jsonFileToObject("Customer.json", Customer.class);
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(Optional.of(customer));
 
         InvestorInfoResponse actual = withdrawalEngineService.getInvestorInfo("any@example.com");
 
@@ -90,8 +91,8 @@ class WithdrawalEngineServiceImplTest {
         Customer customer = WithdrawalEngineMapperUtils.jsonFileToObject("Customer.json", Customer.class);
         List<Product> products = WithdrawalEngineMapperUtils.jsonFileToObjectList("Products.json", Product.class);
 
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        when(productRepository.findAllByCustomer(any(Customer.class))).thenReturn(products);
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(Optional.of(customer));
+        when(productRepository.findAllByCustomer(any(Customer.class))).thenReturn(Optional.of(products));
 
         List<ProductDto> productDtos = withdrawalEngineService.listInvestorProducts("23414");
         assertNotNull(productDtos);
@@ -106,7 +107,7 @@ class WithdrawalEngineServiceImplTest {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
 
         try {
-            when(productRepository.findByAccountNumber(anyString())).thenReturn(product);
+            when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(15000));
             fail();
         } catch (ValidationException e) {
@@ -120,7 +121,7 @@ class WithdrawalEngineServiceImplTest {
     void testWithdraw_thresholdViolation() throws Exception {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
         product.getCustomer().setDob(Date.valueOf(LocalDate.of(1950, 5, 2)));
-        when(productRepository.findByAccountNumber(anyString())).thenReturn(product);
+        when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
 
         try {
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(490000));
@@ -136,7 +137,7 @@ class WithdrawalEngineServiceImplTest {
     void testWithdraw_exceedingLimit() throws Exception {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
         product.getCustomer().setDob(Date.valueOf(LocalDate.of(1950, 5, 2)));
-        when(productRepository.findByAccountNumber(anyString())).thenReturn(product);
+        when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
 
         try {
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(600000));
@@ -152,7 +153,7 @@ class WithdrawalEngineServiceImplTest {
     void testWithdraw() throws Exception {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
         product.getCustomer().setDob(Date.valueOf(LocalDate.of(1950, 5, 2)));
-        when(productRepository.findByAccountNumber(anyString())).thenReturn(product);
+        when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
         when(withdrawalRepository.save(any(Withdrawal.class))).thenReturn(null);
 
         try {

@@ -4,6 +4,8 @@ import dto.InvestorInfoResponse;
 import dto.ProductDto;
 import dto.ProductTypeEnum;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +25,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.random.RandomGenerator;
 
 @Service
 public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
+    Logger logger = LoggerFactory.getLogger(WithdrawalEngineServiceImpl.class);
 
     @Autowired
     private ProductRepository productRepository;
@@ -43,16 +47,18 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
     @Transactional
     @Override
     public Boolean withdraw(String accountNo, BigDecimal amount) {
-        Product product = productRepository.findByAccountNumber(accountNo);
-        if (product == null) {
-            throw new EntityNotFoundException("No product found for the given account number");
+        Product product;
+        try {
+            product = productRepository.findByAccountNumber(accountNo).get();
+        } catch (NoSuchElementException e) {
+            logger.error("No product found for the given account number", e);
+            throw e;
         }
 
         try {
             validateWithdrawalRules(amount, product);
         } catch (ValidationException e) {
-            // Todo: log exception here
-            // Todo: Add an exception handler
+            logger.error("Validations failed", e);
             throw e;
         }
         // todo: Emit STARTED event
@@ -72,27 +78,38 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
 
     @Override
     public InvestorInfoResponse getInvestorInfo(String email) throws EntityNotFoundException {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null) {
-            throw new EntityNotFoundException("No customer found for the given email address");
+        try {
+            Customer customer = customerRepository.findCustomerByEmail(email).get();
+            return dtoMapper.mapCustomerToInvestorInfoResponse(customer);
+        } catch (NoSuchElementException e) {
+            logger.error("No customer found for the given email address", e);
+            throw e;
         }
-
-        return dtoMapper.mapCustomerToInvestorInfoResponse(customer);
     }
 
     @Override
     public List<ProductDto> listInvestorProducts(String email) throws EntityNotFoundException {
-        Customer customer = customerRepository.findCustomerByEmail(email);
-        if (customer == null) {
-            throw new EntityNotFoundException("No customer found for the given email address");
+        Customer customer;
+        try {
+            customer = customerRepository.findCustomerByEmail(email).get();
+        } catch (NoSuchElementException e) {
+            logger.error("No customer found for the given email address", e);
+            throw e;
         }
 
-        List<Product> products = productRepository.findAllByCustomer(customer);
+        List<Product> products;
         List<ProductDto> productDtos = new ArrayList<>();
-        if (products != null || !products.isEmpty()) {
-            for (Product p : products) {
-                productDtos.add(dtoMapper.mapProductToProductDto(p));
+
+        try {
+            products = productRepository.findAllByCustomer(customer).get();
+            if (products != null || !products.isEmpty()) {
+                for (Product p : products) {
+                    productDtos.add(dtoMapper.mapProductToProductDto(p));
+                }
             }
+        } catch (NoSuchElementException e) {
+            logger.error("No products found for customer", e);
+            throw e;
         }
 
         return productDtos;

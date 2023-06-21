@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import za.co.momentum.service.WithdrawalEngineService;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class InvestmentsController {
     }
 
     @PostMapping(value = "/withdraw")
-    public ResponseEntity<Boolean> withDraw(@RequestBody WithdrawalRequest withdrawalRequest) {
+    public ResponseEntity<Boolean> withdraw(@RequestBody WithdrawalRequest withdrawalRequest) {
         return ResponseEntity.ok(withdrawalEngineService
                 .withdraw(withdrawalRequest.getAccountNo(), withdrawalRequest.getAmount()));
     }
