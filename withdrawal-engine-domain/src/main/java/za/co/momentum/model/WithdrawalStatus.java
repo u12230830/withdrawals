@@ -34,7 +34,7 @@ public class WithdrawalStatus {
     )
     private Integer id;
 
-    @Column(name = "NAME")
+    @Column(name = "STATUS")
     private Integer status;
 
     @Column(name = "TRX_ID")

@@ -39,16 +39,14 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final WithdrawalRepository withdrawalRepository;
-    private final WithdrawalStatusRepository withdrawalStatusRepository;
     private final DtoMapper dtoMapper;
     private final Publisher publisher;
 
     public WithdrawalEngineServiceImpl(ProductRepository productRepository, CustomerRepository customerRepository,
-                                       WithdrawalRepository withdrawalRepository, WithdrawalStatusRepository withdrawalStatusRepository, DtoMapper dtoMapper, Publisher publisher) {
+                                       WithdrawalRepository withdrawalRepository, DtoMapper dtoMapper, Publisher publisher) {
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.withdrawalRepository = withdrawalRepository;
-        this.withdrawalStatusRepository = withdrawalStatusRepository;
         this.dtoMapper = dtoMapper;
         this.publisher = publisher;
     }
@@ -123,15 +121,6 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         }
 
         return productDtos;
-    }
-
-    @Override
-    public void createWithdrawalStatus(Long trxId, WithdrawalEventStatusEnum statusEnum) {
-        WithdrawalStatus newStatus = new WithdrawalStatus();
-        newStatus.setTransactionTime(Timestamp.valueOf(LocalDateTime.now()));
-        newStatus.setWithdrawalTransactionId(trxId);
-        newStatus.setStatus(statusEnum.ordinal());
-        withdrawalStatusRepository.save(newStatus);
     }
 
     private void validateWithdrawalRules(BigDecimal amount, Product product) {

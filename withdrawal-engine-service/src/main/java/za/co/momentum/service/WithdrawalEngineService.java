@@ -31,11 +31,4 @@ public interface WithdrawalEngineService {
      * @return
      */
     List<ProductDto> listInvestorProducts(String email);
-
-    /**
-     * Either creates a new WithdrawalStatus or updates an existing one to the next status
-     *
-     * @param trxId
-     */
-    void createWithdrawalStatus(Long trxId, WithdrawalEventStatusEnum statusEnum);
 }
