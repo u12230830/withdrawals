@@ -14,10 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import util.WithdrawalEngineMapperUtils;
-import za.co.momentum.service.WithdrawalEngineServiceImpl;
+import za.co.momentum.service.impl.WithdrawalEngineServiceImpl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,22 +1,25 @@
-package za.co.momentum.service;
+package za.co.momentum.service.impl;
 
+import dto.InvestorInfoResponse;
 import dto.ProductDto;
+import dto.WithdrawalEventStatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoSettings;
-import dto.InvestorInfoResponse;
+import util.WithdrawalEngineMapperUtils;
 import za.co.momentum.exception.ValidationException;
+import za.co.momentum.messaging.publisher.Publisher;
 import za.co.momentum.model.Customer;
 import za.co.momentum.model.Product;
 import za.co.momentum.model.ProductType;
 import za.co.momentum.model.Withdrawal;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;
-import util.WithdrawalEngineMapperUtils;
 import za.co.momentum.repo.WithdrawalRepository;
+import za.co.momentum.service.impl.WithdrawalEngineServiceImpl;
 import za.co.momentum.util.DtoMapper;
 import za.co.momentum.util.DtoMapperImpl;
 
@@ -31,16 +34,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-@MockitoSettings
 class WithdrawalEngineServiceImplTest {
 
     @Mock
@@ -51,6 +55,9 @@ class WithdrawalEngineServiceImplTest {
 
     @Mock
     private WithdrawalRepository withdrawalRepository;
+
+    @Mock
+    private Publisher publisher;
 
     @Spy
     private DtoMapper dtoMapper;
@@ -67,7 +74,7 @@ class WithdrawalEngineServiceImplTest {
     @Test
     void testGetInvestorInfo() throws Exception {
         Customer customer = WithdrawalEngineMapperUtils.jsonFileToObject("Customer.json", Customer.class);
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByEmail(any())).thenReturn(Optional.of(customer));
 
         InvestorInfoResponse actual = withdrawalEngineService.getInvestorInfo("any@example.com");
 
@@ -107,7 +114,7 @@ class WithdrawalEngineServiceImplTest {
         Product product = WithdrawalEngineMapperUtils.jsonFileToObject("Product.json", Product.class);
 
         try {
-            when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
+            when(productRepository.findByAccountNumber(eq("2342341"))).thenReturn(Optional.of(product));
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(15000));
             fail();
         } catch (ValidationException e) {
@@ -155,6 +162,7 @@ class WithdrawalEngineServiceImplTest {
         product.getCustomer().setDob(Date.valueOf(LocalDate.of(1950, 5, 2)));
         when(productRepository.findByAccountNumber(anyString())).thenReturn(Optional.of(product));
         when(withdrawalRepository.save(any(Withdrawal.class))).thenReturn(null);
+        doNothing().when(publisher).convertAndSend(any(WithdrawalEventStatusEnum.class), anyLong());
 
         try {
             withdrawalEngineService.withdraw("2342341", BigDecimal.valueOf(10000));

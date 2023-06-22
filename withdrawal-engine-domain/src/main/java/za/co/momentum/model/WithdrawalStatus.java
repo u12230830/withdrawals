@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.random.RandomGenerator;
@@ -19,6 +20,7 @@ import java.util.random.RandomGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class WithdrawalStatus {
     @Id
     @GeneratedValue(

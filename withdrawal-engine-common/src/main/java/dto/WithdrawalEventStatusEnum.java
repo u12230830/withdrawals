@@ -3,5 +3,9 @@ package dto;
 public enum WithdrawalEventStatusEnum {
     STARTED,
     EXECUTING,
-    DONE
+    DONE;
+
+    public WithdrawalEventStatusEnum next(){
+        return WithdrawalEventStatusEnum.values()[this.ordinal() + 1];
+    }
 }

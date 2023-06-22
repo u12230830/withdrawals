@@ -23,7 +23,7 @@ public class InvestmentsController {
     WithdrawalEngineService withdrawalEngineService;
 
     @GetMapping(value = "/{email}")
-    public ResponseEntity<InvestorInfoResponse> getInvestorInfo(@PathVariable(name = "email") String email) {
+    public ResponseEntity<InvestorInfoResponse> getInvestorInfo(@PathVariable(name = "email") String email) throws InterruptedException {
         return ResponseEntity.ok(withdrawalEngineService.getInvestorInfo(email));
     }
 
@@ -33,7 +33,7 @@ public class InvestmentsController {
     }
 
     @PostMapping(value = "/withdraw")
-    public ResponseEntity<Boolean> withdraw(@RequestBody WithdrawalRequest withdrawalRequest) {
+    public ResponseEntity<Boolean> withdraw(@RequestBody WithdrawalRequest withdrawalRequest) throws InterruptedException {
         return ResponseEntity.ok(withdrawalEngineService
                 .withdraw(withdrawalRequest.getAccountNo(), withdrawalRequest.getAmount()));
     }

@@ -1,21 +1,25 @@
-package za.co.momentum.service;
+package za.co.momentum.service.impl;
 
 import dto.InvestorInfoResponse;
 import dto.ProductDto;
 import dto.ProductTypeEnum;
+import dto.WithdrawalEventStatusEnum;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.momentum.exception.ValidationException;
+import za.co.momentum.messaging.publisher.Publisher;
 import za.co.momentum.model.Customer;
 import za.co.momentum.model.Product;
 import za.co.momentum.model.Withdrawal;
+import za.co.momentum.model.WithdrawalStatus;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;
 import za.co.momentum.repo.WithdrawalRepository;
+import za.co.momentum.repo.WithdrawalStatusRepository;
+import za.co.momentum.service.WithdrawalEngineService;
 import za.co.momentum.util.DtoMapper;
 
 import java.math.BigDecimal;
@@ -32,21 +36,26 @@ import java.util.random.RandomGenerator;
 public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
     Logger logger = LoggerFactory.getLogger(WithdrawalEngineServiceImpl.class);
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
+    private final WithdrawalRepository withdrawalRepository;
+    private final WithdrawalStatusRepository withdrawalStatusRepository;
+    private final DtoMapper dtoMapper;
+    private final Publisher publisher;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private WithdrawalRepository withdrawalRepository;
-
-    @Autowired
-    private DtoMapper dtoMapper;
+    public WithdrawalEngineServiceImpl(ProductRepository productRepository, CustomerRepository customerRepository,
+                                       WithdrawalRepository withdrawalRepository, WithdrawalStatusRepository withdrawalStatusRepository, DtoMapper dtoMapper, Publisher publisher) {
+        this.productRepository = productRepository;
+        this.customerRepository = customerRepository;
+        this.withdrawalRepository = withdrawalRepository;
+        this.withdrawalStatusRepository = withdrawalStatusRepository;
+        this.dtoMapper = dtoMapper;
+        this.publisher = publisher;
+    }
 
     @Transactional
     @Override
-    public Boolean withdraw(String accountNo, BigDecimal amount) {
+    public Boolean withdraw(String accountNo, BigDecimal amount) throws InterruptedException {
         Product product;
         try {
             product = productRepository.findByAccountNumber(accountNo).get();
@@ -61,18 +70,19 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             logger.error("Validations failed", e);
             throw e;
         }
-        // todo: Emit STARTED event
 
-        Long trx = RandomGenerator.getDefault().nextLong();
-        Withdrawal withdrawal = createNewWithdrawal(amount, product, trx);
+        Long trxId = RandomGenerator.getDefault().nextLong(0, Long.MAX_VALUE);
+        sendToQueue(WithdrawalEventStatusEnum.STARTED, trxId);
 
-        // todo: EXECUTING
+        Withdrawal withdrawal = createNewWithdrawal(amount, product, trxId);
+
+        sendToQueue(WithdrawalEventStatusEnum.EXECUTING, trxId);
         product.setBalance(product.getBalance().subtract(amount));
 
         productRepository.save(product);
         withdrawalRepository.save(withdrawal);
 
-        // todo: DONE
+        sendToQueue(WithdrawalEventStatusEnum.DONE, trxId);
         return true;
     }
 
@@ -115,6 +125,15 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         return productDtos;
     }
 
+    @Override
+    public void createWithdrawalStatus(Long trxId, WithdrawalEventStatusEnum statusEnum) {
+        WithdrawalStatus newStatus = new WithdrawalStatus();
+        newStatus.setTransactionTime(Timestamp.valueOf(LocalDateTime.now()));
+        newStatus.setWithdrawalTransactionId(trxId);
+        newStatus.setStatus(statusEnum.ordinal());
+        withdrawalStatusRepository.save(newStatus);
+    }
+
     private void validateWithdrawalRules(BigDecimal amount, Product product) {
         if (product.getId().equals(ProductTypeEnum.RETIREMENT.getProductTypeId())
                 && calculateAge(product.getCustomer().getDob()) <= 65) {
@@ -134,6 +153,14 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
         }
     }
 
+    private void sendToQueue(WithdrawalEventStatusEnum statusEnum, Long trxId) throws InterruptedException {
+        try {
+            publisher.convertAndSend(statusEnum, trxId);
+        } catch (InterruptedException e) {
+            logger.error("Failed to publish message to the queue", e);
+            throw e;
+        }
+    }
 
     private Withdrawal createNewWithdrawal(BigDecimal amount, Product product, Long trx) {
         Withdrawal withdrawal = new Withdrawal();
