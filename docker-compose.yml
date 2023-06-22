@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   rabbitmq:
@@ -10,6 +10,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  withdrawals:
+    container_name: withdrawals-app
+    image: withdrawals
+    depends_on:
+      - rabbitmq
+    build: .
+    ports:
+      - "8080:8080"
 
 networks:
   default:
