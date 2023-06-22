@@ -2,7 +2,6 @@ package za.co.momentum.service;
 
 import dto.InvestorInfoResponse;
 import dto.ProductDto;
-import dto.WithdrawalEventStatusEnum;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +11,7 @@ public interface WithdrawalEngineService {
      * This operation specifies the action of withdrawing funds from the customer's account.
      *
      * @param accountNo Refers to the account number linked to the customer's product
-     * @param amount Specifies the amount to be withdrawn from the specified account number
+     * @param amount    Specifies the amount to be withdrawn from the specified account number
      * @return True if successful and false if not
      */
     Boolean withdraw(String accountNo, BigDecimal amount) throws InterruptedException;
@@ -27,6 +26,7 @@ public interface WithdrawalEngineService {
 
     /**
      * Retrieves a list of all the products belonging to a given investor
+     *
      * @param email
      * @return
      */

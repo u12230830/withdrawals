@@ -10,15 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.momentum.exception.ValidationException;
+import za.co.momentum.exception.WithdrawalServiceException;
 import za.co.momentum.messaging.publisher.Publisher;
 import za.co.momentum.model.Customer;
 import za.co.momentum.model.Product;
 import za.co.momentum.model.Withdrawal;
-import za.co.momentum.model.WithdrawalStatus;
 import za.co.momentum.repo.CustomerRepository;
 import za.co.momentum.repo.ProductRepository;
 import za.co.momentum.repo.WithdrawalRepository;
-import za.co.momentum.repo.WithdrawalStatusRepository;
 import za.co.momentum.service.WithdrawalEngineService;
 import za.co.momentum.util.DtoMapper;
 
@@ -59,7 +58,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             product = productRepository.findByAccountNumber(accountNo).get();
         } catch (NoSuchElementException e) {
             logger.error("No product found for the given account number", e);
-            throw e;
+            throw new WithdrawalServiceException("No product found for the given account number", e);
         }
 
         try {
@@ -71,16 +70,20 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
 
         Long trxId = RandomGenerator.getDefault().nextLong(0, Long.MAX_VALUE);
         sendToQueue(WithdrawalEventStatusEnum.STARTED, trxId);
+        logger.info("Withdrawal started...");
 
         Withdrawal withdrawal = createNewWithdrawal(amount, product, trxId);
 
         sendToQueue(WithdrawalEventStatusEnum.EXECUTING, trxId);
         product.setBalance(product.getBalance().subtract(amount));
+        logger.info("Withdrawal executing...");
 
         productRepository.save(product);
         withdrawalRepository.save(withdrawal);
 
         sendToQueue(WithdrawalEventStatusEnum.DONE, trxId);
+        logger.info("Withdrawal done...");
+
         return true;
     }
 
@@ -91,7 +94,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             return dtoMapper.mapCustomerToInvestorInfoResponse(customer);
         } catch (NoSuchElementException e) {
             logger.error("No customer found for the given email address", e);
-            throw e;
+            throw new WithdrawalServiceException("No customer found for the given email address", e);
         }
     }
 
@@ -102,7 +105,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             customer = customerRepository.findCustomerByEmail(email).get();
         } catch (NoSuchElementException e) {
             logger.error("No customer found for the given email address", e);
-            throw e;
+            throw new WithdrawalServiceException("No customer found for the given email address", e);
         }
 
         List<Product> products;
@@ -117,7 +120,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             }
         } catch (NoSuchElementException e) {
             logger.error("No products found for customer", e);
-            throw e;
+            throw new WithdrawalServiceException("No products found for customer", e);
         }
 
         return productDtos;
@@ -147,7 +150,7 @@ public class WithdrawalEngineServiceImpl implements WithdrawalEngineService {
             publisher.convertAndSend(statusEnum, trxId);
         } catch (InterruptedException e) {
             logger.error("Failed to publish message to the queue", e);
-            throw e;
+            throw new WithdrawalServiceException("Failed to publish message to the queue", e);
         }
     }
 

@@ -1,11 +1,11 @@
 package za.co.momentum.messaging.listener;
 
 import dto.WithdrawalEventStatusEnum;
+import dto.WithdrawalStatusQueueMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import util.WithdrawalEngineMapperUtils;
-import dto.WithdrawalStatusQueueMessage;
 import za.co.momentum.model.WithdrawalStatus;
 import za.co.momentum.repo.WithdrawalStatusRepository;
 

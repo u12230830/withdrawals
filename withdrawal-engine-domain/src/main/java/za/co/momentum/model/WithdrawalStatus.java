@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.random.RandomGenerator;
 
 @Entity
 @Table(name = "WITHDRAWAL_STATUS")

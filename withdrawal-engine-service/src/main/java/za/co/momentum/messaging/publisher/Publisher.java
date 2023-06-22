@@ -1,15 +1,14 @@
 package za.co.momentum.messaging.publisher;
 
 import dto.WithdrawalEventStatusEnum;
+import dto.WithdrawalStatusQueueMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import util.WithdrawalEngineMapperUtils;
 import za.co.momentum.config.WithdrawalServiceConfig;
-import dto.WithdrawalStatusQueueMessage;
 import za.co.momentum.messaging.listener.Listener;
 
 import java.util.concurrent.TimeUnit;
