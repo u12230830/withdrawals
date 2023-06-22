@@ -19,8 +19,12 @@ import java.util.List;
 @RequestMapping("/investments")
 public class InvestmentsController {
 
-    @Autowired
-    WithdrawalEngineService withdrawalEngineService;
+    final WithdrawalEngineService withdrawalEngineService;
+
+    public InvestmentsController(WithdrawalEngineService withdrawalEngineService) {
+        this.withdrawalEngineService = withdrawalEngineService;
+    }
+
 
     @GetMapping(value = "/{email}")
     public ResponseEntity<InvestorInfoResponse> getInvestorInfo(@PathVariable(name = "email") String email) throws InterruptedException {

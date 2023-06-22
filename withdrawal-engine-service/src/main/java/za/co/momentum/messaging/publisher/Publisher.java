@@ -17,11 +17,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class Publisher {
     Logger logger = LoggerFactory.getLogger(Publisher.class);
-
     private final RabbitTemplate rabbitTemplate;
     private final Listener listener;
 
-    @Autowired
     public Publisher(Listener listener, RabbitTemplate rabbitTemplate) {
         this.listener = listener;
         this.rabbitTemplate = rabbitTemplate;
